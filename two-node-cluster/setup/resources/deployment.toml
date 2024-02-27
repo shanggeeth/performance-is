@@ -130,8 +130,8 @@ grant_validator="org.wso2.carbon.identity.oauth2.grant.token.exchange.TokenExcha
 IdTokenAllowed=true
 IATValidityPeriod="86400"
 
-[AdaptiveAuth]
-ScriptEngine = "graaljs"
+#[AdaptiveAuth]
+#ScriptEngine = "graaljs"
 
 # [AdaptiveAuth]
 # LimitScriptEngineCreation= true
