@@ -133,5 +133,5 @@ IATValidityPeriod="86400"
 #[AdaptiveAuth]
 #ScriptEngine = "graaljs"
 
-[AdaptiveAuth]
-LimitScriptEngineCreation= true
+#[AdaptiveAuth]
+#LimitScriptEngineCreation= true
