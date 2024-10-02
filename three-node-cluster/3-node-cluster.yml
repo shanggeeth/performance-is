@@ -637,7 +637,7 @@ Parameters:
       - CentOS_7
   BastionInstanceType:
     Type: String
-    Default: c5.xlarge
+    Default: c5.4xlarge
     AllowedValues:
       - t2.micro
       - t2.medium
