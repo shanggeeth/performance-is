@@ -367,6 +367,11 @@ wso2is_6_instance="$(aws autoscaling describe-auto-scaling-groups --auto-scaling
 wso2_is_6_ip="$(aws ec2 describe-instances --instance-ids "$wso2is_6_instance" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
 echo "WSO2 IS Node 6 Private IP: $wso2_is_6_ip"
 
+echo ""
+echo "Getting RDS Hostname..."
+rds_instance="$(aws cloudformation describe-stack-resources --stack-name "$stack_id" --logical-resource-id WSO2ISDBInstance"$random_number" | jq -r '.StackResources[].PhysicalResourceId')"
+rds_host="$(aws rds describe-db-instances --db-instance-identifier "$rds_instance" | jq -r '.DBInstances[].Endpoint.Address')"
+echo "RDS Hostname: $rds_host"
 
 if [[ -z $bastion_node_ip ]]; then
     echo "Bastion node IP could not be found. Exiting..."
