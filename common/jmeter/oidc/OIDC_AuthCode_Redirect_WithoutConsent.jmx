@@ -241,8 +241,12 @@ if (y == 0 || &quot;active-passive&quot;.equals(deploymentType)) {
     vars.put(&quot;serverNode&quot;, &quot;node2&quot;);
 } else if (y == 2) {
     vars.put(&quot;serverNode&quot;, &quot;node3&quot;);
-} else {
+} else if (y == 3) {
     vars.put(&quot;serverNode&quot;, &quot;node4&quot;);
+} else if (y == 4) {
+    vars.put(&quot;serverNode&quot;, &quot;node5&quot;);
+} else {
+    vars.put(&quot;serverNode&quot;, &quot;node6&quot;);
 }</stringProp>
         </BeanShellPreProcessor>
         <hashTree/>

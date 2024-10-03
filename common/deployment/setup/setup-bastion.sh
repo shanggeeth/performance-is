@@ -24,6 +24,8 @@ wso2_is_1_ip=""
 wso2_is_2_ip=""
 wso2_is_3_ip=""
 wso2_is_4_ip=""
+wso2_is_5_ip=""
+wso2_is_6_ip=""
 lb_host=""
 rds_host=""
 wso2is_host_alias=wso2is
@@ -31,6 +33,8 @@ wso2is_1_host_alias=wso2is1
 wso2is_2_host_alias=wso2is2
 wso2is_3_host_alias=wso2is3
 wso2is_4_host_alias=wso2is4
+wso2is_5_host_alias=wso2is5
+wso2is_6_host_alias=wso2is6
 lb_alias=loadbalancer
 
 function usage() {
@@ -42,13 +46,15 @@ function usage() {
     echo "-i: The private IP of WSO2 IS node 2."
     echo "-j: The private IP of WSO2 IS node 3."
     echo "-k: The private IP of WSO2 IS node 4."
+    echo "-p: The private IP of WSO2 IS node 5."
+    echo "-q: The private IP of WSO2 IS node 6."
     echo "-l: The private hostname of Load balancer instance."
     echo "-r: The private hostname of RDS instance."
     echo "-h: Display this help and exit."
     echo ""
 }
 
-while getopts "n:w:i:j:k:l:r:h" opts; do
+while getopts "n:w:i:j:k:p:q:l:r:h" opts; do
     case $opts in
     n)
         no_of_nodes=${OPTARG}
@@ -64,6 +70,12 @@ while getopts "n:w:i:j:k:l:r:h" opts; do
         ;;
     k)
         wso2_is_4_ip=${OPTARG}
+        ;;
+    p)
+        wso2_is_5_ip=${OPTARG}
+        ;;
+    q)
+        wso2_is_6_ip=${OPTARG}
         ;;
     l)
         lb_host=${OPTARG}
@@ -154,6 +166,19 @@ elif [[ $no_of_nodes -eq 4 ]]; then
                 -a $wso2is_4_host_alias -n "$wso2_is_4_ip" \
                 -a $lb_alias -n "$lb_host"\
                 -a rds -n "$rds_host"
+elif [[ $no_of_nodes -eq 6 ]]; then
+    workspace/setup/setup-jmeter-client-is.sh -g -k /home/ubuntu/private_key.pem \
+                -i /home/ubuntu \
+                -c /home/ubuntu \
+                -f /home/ubuntu/apache-jmeter-*.tgz \
+                -a $wso2is_1_host_alias -n "$wso2_is_1_ip" \
+                -a $wso2is_2_host_alias -n "$wso2_is_2_ip" \
+                -a $wso2is_3_host_alias -n "$wso2_is_3_ip" \
+                -a $wso2is_4_host_alias -n "$wso2_is_4_ip" \
+                -a $wso2is_5_host_alias -n "$wso2_is_5_ip" \
+                -a $wso2is_6_host_alias -n "$wso2_is_6_ip" \
+                -a $lb_alias -n "$lb_host"\
+                -a rds -n "$rds_host"
 else
     echo "Invalid value for no_of_nodes. Please provide a valid number."
     exit 1
@@ -189,5 +214,7 @@ elif [[ $no_of_nodes -eq 3 ]]; then
     sudo -u ubuntu ssh $lb_alias ./setup-nginx.sh -n "$no_of_nodes" -i "$wso2_is_1_ip" -w "$wso2_is_2_ip" -j "$wso2_is_3_ip"
 elif [[ $no_of_nodes -eq 4 ]]; then
     sudo -u ubuntu ssh $lb_alias ./setup-nginx.sh -n "$no_of_nodes" -i "$wso2_is_1_ip" -w "$wso2_is_2_ip" -j "$wso2_is_3_ip" -k "$wso2_is_4_ip"
+elif [[ $no_of_nodes -eq 6 ]]; then
+    sudo -u ubuntu ssh $lb_alias ./setup-nginx.sh -n "$no_of_nodes" -i "$wso2_is_1_ip" -w "$wso2_is_2_ip" -j "$wso2_is_3_ip" -k "$wso2_is_4_ip" -l "$wso2_is_5_ip" -m "$wso2_is_6_ip"
 fi
 

@@ -157,6 +157,16 @@ Resources:
     Properties:
       RouteTableId: !Ref WSO2ISPublicRouteTablesuffix
       SubnetId: !Ref WSO2ISPublicSubnet4suffix
+  WSO2ISPublicSubnet5RouteTableAssociationsuffix:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref WSO2ISPublicRouteTablesuffix
+      SubnetId: !Ref WSO2ISPublicSubnet5suffix
+  WSO2ISPublicSubnet6RouteTableAssociationsuffix:
+      Type: 'AWS::EC2::SubnetRouteTableAssociation'
+      Properties:
+          RouteTableId: !Ref WSO2ISPublicRouteTablesuffix
+          SubnetId: !Ref WSO2ISPublicSubnet6suffix
   WSO2ISPublicRoutesuffix:
     Type: 'AWS::EC2::Route'
     Properties:
@@ -201,6 +211,22 @@ Resources:
       AvailabilityZone: !Select
         - '3'
         - !GetAZs ''
+  WSO2ISPrivateSubnet5suffix:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref WSO2ISVPCsuffix
+      CidrBlock: 10.0.5.0/24
+      AvailabilityZone: !Select
+        - '4'
+        - !GetAZs ''
+  WSO2ISPrivateSubnet6suffix:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref WSO2ISVPCsuffix
+      CidrBlock: 10.0.6.0/24
+      AvailabilityZone: !Select
+        - '5'
+        - !GetAZs ''
   WSO2ISPrivateSubnetRouteTablesuffix:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -231,6 +257,16 @@ Resources:
     Properties:
       RouteTableId: !Ref WSO2ISPrivateSubnetRouteTablesuffix
       SubnetId: !Ref WSO2ISPrivateSubnet4suffix
+  WSO2ISPrivateSubnet5RouteTableAssociationsuffix:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref WSO2ISPrivateSubnetRouteTablesuffix
+      SubnetId: !Ref WSO2ISPrivateSubnet5suffix
+  WSO2ISPrivateSubnet6RouteTableAssociationsuffix:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref WSO2ISPrivateSubnetRouteTablesuffix
+      SubnetId: !Ref WSO2ISPrivateSubnet6suffix
   WSO2ISNATGatewaysuffix:
     Type: 'AWS::EC2::NatGateway'
     Properties:
@@ -294,6 +330,8 @@ Resources:
         - !Ref WSO2ISPrivateSubnet2suffix
         - !Ref WSO2ISPrivateSubnet3suffix
         - !Ref WSO2ISPrivateSubnet4suffix
+        - !Ref WSO2ISPrivateSubnet5suffix
+        - !Ref WSO2ISPrivateSubnet6suffix
   # File system configurations
   WSO2ISEFSSecurityGroupsuffix:
     Type: 'AWS::EC2::SecurityGroup'
@@ -334,6 +372,20 @@ Resources:
     Type: 'AWS::EFS::MountTarget'
     Properties:
       SubnetId: !Ref WSO2ISPrivateSubnet4suffix
+      FileSystemId: !Ref WSO2ISEFSFileSystemsuffix
+      SecurityGroups:
+        - !Ref WSO2ISEFSSecurityGroupsuffix
+  WSO2ISPrivateSubnet5EFSMountTargetsuffix:
+    Type: 'AWS::EFS::MountTarget'
+    Properties:
+      SubnetId: !Ref WSO2ISPrivateSubnet5suffix
+      FileSystemId: !Ref WSO2ISEFSFileSystemsuffix
+      SecurityGroups:
+        - !Ref WSO2ISEFSSecurityGroupsuffix
+  WSO2ISPrivateSubnet6EFSMountTargetsuffix:
+    Type: 'AWS::EFS::MountTarget'
+    Properties:
+      SubnetId: !Ref WSO2ISPrivateSubnet6suffix
       FileSystemId: !Ref WSO2ISEFSFileSystemsuffix
       SecurityGroups:
         - !Ref WSO2ISEFSSecurityGroupsuffix
@@ -614,6 +666,54 @@ Resources:
       Tags:
         - Key: Name
           Value: suffix_WSO2ISInstance_4
+          PropagateAtLaunch: 'true'
+        - Key: cluster
+          Value: is
+          PropagateAtLaunch: 'true'
+        - Key: User
+          Value: !Ref UserTag
+          PropagateAtLaunch: 'true'
+    DependsOn:
+      - WSO2ISNodeLaunchConfigurationsuffix
+
+  WSO2ISNode5AutoScalingGroupsuffix:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    Properties:
+      LaunchConfigurationName: !Ref WSO2ISNodeLaunchConfigurationsuffix
+      DesiredCapacity: 1
+      MinSize: 1
+      MaxSize: 1
+      VPCZoneIdentifier:
+        # Uncomment public subnet to assign a public IP to the IS instance.
+        # - !Ref WSO2ISPublicSubnet1suffix
+        - !Ref WSO2ISPrivateSubnet1suffix
+      Tags:
+        - Key: Name
+          Value: suffix_WSO2ISInstance_5
+          PropagateAtLaunch: 'true'
+        - Key: cluster
+          Value: is
+          PropagateAtLaunch: 'true'
+        - Key: User
+          Value: !Ref UserTag
+          PropagateAtLaunch: 'true'
+    DependsOn:
+      - WSO2ISNodeLaunchConfigurationsuffix
+
+  WSO2ISNode6AutoScalingGroupsuffix:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    Properties:
+      LaunchConfigurationName: !Ref WSO2ISNodeLaunchConfigurationsuffix
+      DesiredCapacity: 1
+      MinSize: 1
+      MaxSize: 1
+      VPCZoneIdentifier:
+        # Uncomment public subnet to assign a public IP to the IS instance.
+        # - !Ref WSO2ISPublicSubnet1suffix
+        - !Ref WSO2ISPrivateSubnet1suffix
+      Tags:
+        - Key: Name
+          Value: suffix_WSO2ISInstance_6
           PropagateAtLaunch: 'true'
         - Key: cluster
           Value: is

@@ -27,13 +27,15 @@ function usage() {
     echo "-i: The IP of wso2is node 1."
     echo "-j: The IP of wso2is node 3."
     echo "-k: The IP of wso2is node 4."
+    echo "-l: The IP of wso2is node 5."
+    echo "-m: The IP of wso2is node 6."
     echo "-r: The IP address of RDS."
     echo "-w: The IP of wso2is node 2."
     echo "-h: Display this help and exit."
     echo ""
 }
 
-while getopts "n:w:i:j:k:r:h" opts; do
+while getopts "n:w:i:j:k:l:m:r:h" opts; do
     case $opts in
     n)
         no_of_nodes=${OPTARG}
@@ -49,6 +51,12 @@ while getopts "n:w:i:j:k:r:h" opts; do
         ;;
     k)
         wso2_is_4_ip=${OPTARG}
+        ;;
+    l)
+        wso2_is_5_ip=${OPTARG}
+        ;;
+    m)
+        wso2_is_6_ip=${OPTARG}
         ;;
     r)
         db_instance_ip=${OPTARG}
@@ -126,6 +134,10 @@ if [[ $no_of_nodes -gt 2 ]]; then
 fi
 if [[ $no_of_nodes -gt 3 ]]; then
     sed -i "s|member_ip_4|$wso2_is_4_ip|g" "$carbon_home"/repository/conf/deployment.toml || echo "Editing deployment.toml file failed!"
+fi
+if [[ $no_of_nodes -gt 5 ]]; then
+    sed -i "s|member_ip_5|$wso2_is_5_ip|g" "$carbon_home"/repository/conf/deployment.toml || echo "Editing deployment.toml file failed!"
+    sed -i "s|member_ip_6|$wso2_is_6_ip|g" "$carbon_home"/repository/conf/deployment.toml || echo "Editing deployment.toml file failed!"
 fi
 
 echo ""

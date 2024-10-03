@@ -278,7 +278,7 @@ jq -n \
 
 stack_create_start_time=$(date +%s)
 create_stack_command="aws cloudformation create-stack --stack-name $stack_name \
-    --template-body file://new-4-node-cluster.yml --parameters \
+    --template-body file://new-6-node-cluster.yml --parameters \
         ParameterKey=CertificateName,ParameterValue=$certificate_name \
         ParameterKey=KeyPairName,ParameterValue=$key_name \
         ParameterKey=DBUsername,ParameterValue=$db_username \
@@ -353,6 +353,20 @@ wso2is_4_instance="$(aws autoscaling describe-auto-scaling-groups --auto-scaling
 wso2_is_4_ip="$(aws ec2 describe-instances --instance-ids "$wso2is_4_instance" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
 echo "WSO2 IS Node 4 Private IP: $wso2_is_4_ip"
 
+echo ""
+echo "Getting WSO2 IS Node 5 Private IP..."
+wso2is_5_auto_scaling_grp="$(aws cloudformation describe-stack-resources --stack-name "$stack_id" --logical-resource-id WSO2ISNode5AutoScalingGroup"$random_number" | jq -r '.StackResources[].PhysicalResourceId')"
+wso2is_5_instance="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "$wso2is_5_auto_scaling_grp" | jq -r '.AutoScalingGroups[].Instances[].InstanceId')"
+wso2_is_5_ip="$(aws ec2 describe-instances --instance-ids "$wso2is_5_instance" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
+echo "WSO2 IS Node 5 Private IP: $wso2_is_5_ip"
+
+echo ""
+echo "Getting WSO2 IS Node 6 Private IP..."
+wso2is_6_auto_scaling_grp="$(aws cloudformation describe-stack-resources --stack-name "$stack_id" --logical-resource-id WSO2ISNode6AutoScalingGroup"$random_number" | jq -r '.StackResources[].PhysicalResourceId')"
+wso2is_6_instance="$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "$wso2is_6_auto_scaling_grp" | jq -r '.AutoScalingGroups[].Instances[].InstanceId')"
+wso2_is_6_ip="$(aws ec2 describe-instances --instance-ids "$wso2is_6_instance" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
+echo "WSO2 IS Node 6 Private IP: $wso2_is_6_ip"
+
 
 if [[ -z $bastion_node_ip ]]; then
     echo "Bastion node IP could not be found. Exiting..."
@@ -376,6 +390,14 @@ if [[ -z $wso2_is_3_ip ]]; then
 fi
 if [[ -z $wso2_is_4_ip ]]; then
     echo "WSO2 node 4 IP could not be found. Exiting..."
+    exit 1
+fi
+if [[ -z $wso2_is_5_ip ]]; then
+    echo "WSO2 node 5 IP could not be found. Exiting..."
+    exit 1
+fi
+if [[ -z $wso2_is_6_ip ]]; then
+    echo "WSO2 node 6 IP could not be found. Exiting..."
     exit 1
 fi
 if [[ -z $rds_host ]]; then
@@ -413,7 +435,7 @@ echo ""
 echo "Running Bastion Node setup script..."
 echo "============================================"
 setup_bastion_node_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
-    sudo ./setup/setup-bastion.sh -n $no_of_nodes -w $wso2_is_1_ip -i $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -r $rds_host -l $nginx_instance_ip"
+    sudo ./setup/setup-bastion.sh -n $no_of_nodes -w $wso2_is_1_ip -i $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -p $wso2_is_5_ip -q $wso2_is_6_ip -r $rds_host -l $nginx_instance_ip"
 echo "$setup_bastion_node_command"
 # Handle any error and let the script continue.
 $setup_bastion_node_command || echo "Remote ssh command failed."
@@ -436,7 +458,7 @@ echo ""
 echo "Running IS node 1 setup script..."
 echo "============================================"
 setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
-    ./setup/setup-is.sh -n $no_of_nodes -a wso2is1 -i $wso2_is_1_ip -w $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -r $rds_host"
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is1 -i $wso2_is_1_ip -w $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -l $wso2_is_5_ip -m $wso2_is_6_ip -r $rds_host"
 echo "$setup_is_command"
 # Handle any error and let the script continue.
 $setup_is_command || echo "Remote ssh command to setup IS node 1 through bastion failed."
@@ -445,7 +467,7 @@ echo ""
 echo "Running IS node 2 setup script..."
 echo "============================================"
 setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
-    ./setup/setup-is.sh -n $no_of_nodes -a wso2is2 -i $wso2_is_2_ip -w $wso2_is_1_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -r $rds_host"
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is2 -i $wso2_is_2_ip -w $wso2_is_1_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -l $wso2_is_5_ip -m $wso2_is_6_ip -r $rds_host"
 echo "$setup_is_command"
 # Handle any error and let the script continue.
 $setup_is_command || echo "Remote ssh command to setup IS node 2 through bastion failed."
@@ -454,7 +476,7 @@ echo ""
 echo "Running IS node 3 setup script..."
 echo "============================================"
 setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
-    ./setup/setup-is.sh -n $no_of_nodes -a wso2is3 -i $wso2_is_3_ip -w $wso2_is_2_ip -j $wso2_is_1_ip -k $wso2_is_4_ip -r $rds_host"
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is3 -i $wso2_is_3_ip -w $wso2_is_2_ip -j $wso2_is_1_ip -k $wso2_is_4_ip -l $wso2_is_5_ip -m $wso2_is_6_ip -r $rds_host"
 echo "$setup_is_command"
 # Handle any error and let the script continue.
 $setup_is_command || echo "Remote ssh command to setup IS node 3 through bastion failed."
@@ -463,10 +485,28 @@ echo ""
 echo "Running IS node 4 setup script..."
 echo "============================================"
 setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
-    ./setup/setup-is.sh -n $no_of_nodes -a wso2is4 -i $wso2_is_4_ip -w $wso2_is_3_ip -j $wso2_is_2_ip -k $wso2_is_1_ip -r $rds_host"
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is4 -i $wso2_is_4_ip -w $wso2_is_3_ip -j $wso2_is_2_ip -k $wso2_is_1_ip -l $wso2_is_5_ip -m $wso2_is_6_ip -r $rds_host"
 echo "$setup_is_command"
 # Handle any error and let the script continue.
 $setup_is_command || echo "Remote ssh command to setup IS node 4 through bastion failed."
+
+echo ""
+echo "Running IS node 5 setup script..."
+echo "============================================"
+setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is5 -i $wso2_is_5_ip -w $wso2_is_4_ip -j $wso2_is_3_ip -k $wso2_is_2_ip -l $wso2_is_1_ip -m $wso2_is_6_ip -r $rds_host"
+echo "$setup_is_command"
+# Handle any error and let the script continue.
+$setup_is_command || echo "Remote ssh command to setup IS node 5 through bastion failed."
+
+echo ""
+echo "Running IS node 6 setup script..."
+echo "============================================"
+setup_is_command="ssh -i $key_file -o "StrictHostKeyChecking=no" -t ubuntu@$bastion_node_ip \
+    ./setup/setup-is.sh -n $no_of_nodes -a wso2is6 -i $wso2_is_6_ip -w $wso2_is_5_ip -j $wso2_is_4_ip -k $wso2_is_3_ip -l $wso2_is_2_ip -m $wso2_is_1_ip -r $rds_host"
+echo "$setup_is_command"
+# Handle any error and let the script continue.
+$setup_is_command || echo "Remote ssh command to setup IS node 6 through bastion failed."
 
 echo ""
 echo "Running performance tests..."

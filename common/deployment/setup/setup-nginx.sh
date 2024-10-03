@@ -29,6 +29,8 @@ function usage() {
     echo "-w: The IP of wso2is node 2."
     echo "-j: The IP of wso2is node 3."
     echo "-k: The IP of wso2is node 4."
+    echo "-l: The IP of wso2is node 5."
+    echo "-m: The IP of wso2is node 6."
     echo "-h: Display this help and exit."
     echo ""
 }
@@ -49,6 +51,12 @@ while getopts "n:i:w:j:k:h" opts; do
         ;;
     k)
         wso2_is_4_ip=("${OPTARG}")
+        ;;
+    l)
+        wso2_is_5_ip=("${OPTARG}")
+        ;;
+    m)
+        wso2_is_6_ip=("${OPTARG}")
         ;;
     h)
         usage
@@ -85,6 +93,10 @@ if [[ $no_of_nodes -gt 2 ]]; then
 fi
 if [[ $no_of_nodes -gt 3 ]]; then
     sudo sed -i 's$server xxx.xxx.xxx.4:9443$server '$wso2_is_4_ip':9443$g' /etc/nginx/conf.d/is.conf || echo "error 1"
+fi
+if [[ $no_of_nodes -gt 5 ]]; then
+    sudo sed -i 's$server xxx.xxx.xxx.5:9443$server '$wso2_is_5_ip':9443$g' /etc/nginx/conf.d/is.conf || echo "error 1"
+    sudo sed -i 's$server xxx.xxx.xxx.6:9443$server '$wso2_is_6_ip':9443$g' /etc/nginx/conf.d/is.conf || echo "error 1"
 fi
 
 echo ""

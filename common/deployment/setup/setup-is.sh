@@ -29,12 +29,14 @@ function usage() {
     echo "-w: The IP of wso2is node 2."
     echo "-j: The IP of wso2is node 3."
     echo "-k: The IP of wso2is node 4."
+    echo "-l: The IP of wso2is node 5."
+    echo "-m: The IP of wso2is node 6."
     echo "-r: The IP address of RDS."
     echo "-h: Display this help and exit."
     echo ""
 }
 
-while getopts "a:n:w:i:j:k:r:h" opts; do
+while getopts "a:n:w:i:j:k:l:m:r:h" opts; do
     case $opts in
     a)
         is_host_alias=${OPTARG}
@@ -53,6 +55,12 @@ while getopts "a:n:w:i:j:k:r:h" opts; do
         ;;
     k)
         wso2_is_4_ip=${OPTARG}
+        ;;
+    l)
+        wso2_is_5_ip=${OPTARG}
+        ;;
+    m)
+        wso2_is_6_ip=${OPTARG}
         ;;
     r)
         db_instance_ip=${OPTARG}
@@ -107,6 +115,9 @@ elif [[ $no_of_nodes -eq 3 ]]; then
 elif [[ $no_of_nodes -eq 4 ]]; then
     setup_is_node_command="ssh -i ~/private_key.pem -o "StrictHostKeyChecking=no" -t ubuntu@$wso2_is_1_ip \
       ./update-is-conf.sh -n $no_of_nodes -r $db_instance_ip -w $wso2_is_1_ip -i $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip"
+elif [[ $no_of_nodes -eq 6 ]]; then
+    setup_is_node_command="ssh -i ~/private_key.pem -o "StrictHostKeyChecking=no" -t ubuntu@$wso2_is_1_ip \
+      ./update-is-conf.sh -n $no_of_nodes -r $db_instance_ip -w $wso2_is_1_ip -i $wso2_is_2_ip -j $wso2_is_3_ip -k $wso2_is_4_ip -l $wso2_is_5_ip -m $wso2_is_6_ip"
 else
     echo "Invalid value for no_of_nodes. Please provide a valid number."
     exit 1

@@ -25,9 +25,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>is-performance-fournode-cluster</artifactId>
+    <artifactId>is-performance-sixnode-cluster</artifactId>
 
-    <name>IS Performance Four Node Cluster</name>
+    <name>IS Performance Six Node Cluster</name>
     <packaging>pom</packaging>
 
     <dependencies>
