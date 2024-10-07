@@ -60,10 +60,10 @@ concurrency=""
 default_heap_sizes="2G"
 
 # Test Duration in minutes
-default_test_duration=30
+default_test_duration=15
 test_duration=$default_test_duration
 # Warm-up time in minutes
-default_warm_up_time=10
+default_warm_up_time=5
 warm_up_time=$default_warm_up_time
 # Heap size of JMeter Client
 default_jmeter_client_heap_size=2G
@@ -221,9 +221,12 @@ if [ "$concurrency" == "50-500" ]; then
 elif [ "$concurrency" == "1500" ]; then
     echo "Running tests for concurrency level 1500"
     default_concurrent_users="1500"
+elif [ "$concurrency" == "200" ]; then
+    echo "Running tests for concurrency level 200"
+    default_concurrent_users="1500"
 else
     echo "Running tests for concurrency level 50-3000"
-    default_concurrent_users="1500"
+    default_concurrent_users="200"
 fi
 
 if [[ -z $test_duration ]]; then

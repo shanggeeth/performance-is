@@ -537,7 +537,7 @@ Parameters:
     NoEcho: true
   DBInstanceType:
     Type: String
-    Default: db.m5.2xlarge
+    Default: db.m5.4xlarge
     AllowedValues:
       - db.t2.medium
       - db.t2.large
@@ -552,6 +552,7 @@ Parameters:
       - db.m4.2xlarge
       - db.m5.xlarge
       - db.m5.2xlarge
+      - db.m5.4xlarge
   DBAllocationStorage:
     Description: Provide storage size in Gigabytes
     Type: Number
