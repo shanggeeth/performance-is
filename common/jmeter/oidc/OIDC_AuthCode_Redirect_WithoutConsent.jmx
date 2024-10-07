@@ -580,7 +580,7 @@ ${password}</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput" enabled="true">
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput" enabled="false">
           <intProp name="calcMode">1</intProp>
           <stringProp name="throughput">${constantTPS}</stringProp>
         </ConstantThroughputTimer>
