@@ -37,7 +37,7 @@ default_db_password="wso2carbon"
 db_password="$default_db_password"
 default_db_storage="100"
 db_storage=$default_db_storage
-default_db_instance_type=db.m5.2xlarge
+default_db_instance_type=db.m5.4xlarge
 db_instance_type=$default_db_instance_type
 default_is_instance_type=c5.xlarge
 wso2_is_instance_type="$default_is_instance_type"
@@ -447,7 +447,7 @@ $setup_bastion_node_command || echo "Remote ssh command failed."
 
 echo ""
 echo "Sleep for FD Limit"
-sleep 30m
+sleep 2m
 
 echo ""
 echo "Creating databases in RDS..."
