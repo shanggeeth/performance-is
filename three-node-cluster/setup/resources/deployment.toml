@@ -157,3 +157,5 @@ IATValidityPeriod="86400"
 [oauth.token_cleanup]
 enable = false
 
+[oauth.token_persistence]
+enable=false
