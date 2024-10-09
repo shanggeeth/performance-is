@@ -566,7 +566,7 @@ Parameters:
     MinLength: 1
   WSO2InstanceType:
     Type: String
-    Default: c5.xlarge
+    Default: c5.2xlarge
     AllowedValues:
       - t2.micro
       - t2.medium
@@ -582,6 +582,7 @@ Parameters:
       - c4.xlarge
       - c5.large
       - c5.xlarge
+      - c5.2xlarge
     ConstraintDescription: Must be a valid EC2 instance type
   DBUsername:
     Type: String
@@ -596,7 +597,7 @@ Parameters:
     NoEcho: true
   DBInstanceType:
     Type: String
-    Default: db.m5.12xlarge
+    Default: db.m5.24xlarge
     AllowedValues:
       - db.t2.medium
       - db.t2.large
@@ -613,6 +614,7 @@ Parameters:
       - db.m5.2xlarge
       - db.m5.4xlarge
       - db.m5.12xlarge
+      - db.m5.24xlarge
   DBAllocationStorage:
     Description: Provide storage size in Gigabytes
     Type: Number
