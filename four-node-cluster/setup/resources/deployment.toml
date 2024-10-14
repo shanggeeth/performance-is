@@ -30,7 +30,8 @@ validation_query = "SELECT 1"
 username = "wso2carbon"
 password = "wso2carbon"
 [database.identity_db.pool_options]
-maxActive = "400"
+maxActive = "1500"
+defaultAutoCommit=false
 
 [database.shared_db]
 driver = "com.mysql.jdbc.Driver"
@@ -39,7 +40,8 @@ validation_query = "SELECT 1"
 username = "wso2carbon"
 password = "wso2carbon"
 [database.shared_db.pool_options]
-maxActive = "400"
+maxActive = "1500"
+defaultAutoCommit=false
 
 [database.user]
 driver = "com.mysql.jdbc.Driver"
@@ -48,11 +50,12 @@ validation_query = "SELECT 1"
 username = "wso2carbon"
 password = "wso2carbon"
 [database.user.pool_options]
-maxActive = "400"
+maxActive = "1500"
+defaultAutoCommit=false
 
 [transport.https.properties]
-maxThreads = "400"
-acceptCount = "400"
+maxThreads = "1500"
+acceptCount = "1500"
 
 [authentication.consent]
 prompt = true
