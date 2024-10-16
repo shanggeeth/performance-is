@@ -45,7 +45,7 @@ defaultAutoCommit=false
 
 [database.user]
 driver = "com.mysql.jdbc.Driver"
-url = "jdbc:mysql://wso2isdbinstance2.cd3cwezibdu8.us-east-1.rds.amazonaws.com:3306/UM_DB?useSSL=false&amp;rewriteBatchedStatements=true"
+url = "jdbc:mysql://wso2isdbinstance2.cd3cwezibdu8.us-east-1.rds.amazonaws.com:3306/SESSION_DB?useSSL=false&amp;rewriteBatchedStatements=true"
 validation_query = "SELECT 1"
 username = "wso2carbon"
 password = "wso2carbon"

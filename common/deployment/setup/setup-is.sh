@@ -30,11 +30,12 @@ function usage() {
     echo "-j: The IP of wso2is node 3."
     echo "-k: The IP of wso2is node 4."
     echo "-r: The IP address of RDS."
+    echo "-s: The IP address of session DB RDS."
     echo "-h: Display this help and exit."
     echo ""
 }
 
-while getopts "a:n:w:i:j:k:r:h" opts; do
+while getopts "a:n:w:i:j:k:r:s:h" opts; do
     case $opts in
     a)
         is_host_alias=${OPTARG}
@@ -57,6 +58,9 @@ while getopts "a:n:w:i:j:k:r:h" opts; do
     r)
         db_instance_ip=${OPTARG}
         ;;
+    s)
+        session_db_instance_ip=${OPTARG}
+        ;;
     h)
         usage
         exit 0
@@ -75,6 +79,11 @@ fi
 
 if [[ -z $db_instance_ip ]]; then
     echo "Please provide the db instance IP address."
+    exit 1
+fi
+
+if [[ -z $session_db_instance_ip ]]; then
+    echo "Please provide the session db instance IP address."
     exit 1
 fi
 

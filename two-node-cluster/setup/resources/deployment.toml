@@ -53,6 +53,26 @@ password = "wso2carbon"
 maxActive = "1500"
 defaultAutoCommit=false
 
+[session]
+data_source="jdbc/WSO2SessionDB"
+
+[datasource.WSO2SessionDB]
+id = "WSO2SessionDB"
+url = "jdbc:mysql://wso2isdbinstance3.cd3cwezibdu8.us-east-1.rds.amazonaws.com:3306/SESSION_DB_DB?useSSL=false&amp;rewriteBatchedStatements=true"
+username = "wso2carbon"
+password = "wso2carbon"
+driver = "com.mysql.jdbc.Driver"
+jmxEnabled = false
+
+[datasource.WSO2SessionDB.pool_options]
+validationQuery="SELECT 1; COMMIT"
+testOnBorrow = true
+maxActive=1500
+maxWait = 60000
+minIdle = 5
+validationInterval="30000"
+defaultAutoCommit=false
+
 [transport.https.properties]
 maxThreads = "1500"
 acceptCount = "1500"
