@@ -31,7 +31,6 @@ username = "wso2carbon"
 password = "wso2carbon"
 [database.identity_db.pool_options]
 maxActive = "1500"
-defaultAutoCommit=false
 
 [database.shared_db]
 driver = "com.mysql.jdbc.Driver"
@@ -41,7 +40,6 @@ username = "wso2carbon"
 password = "wso2carbon"
 [database.shared_db.pool_options]
 maxActive = "1500"
-defaultAutoCommit=false
 
 [database.user]
 driver = "com.mysql.jdbc.Driver"
@@ -51,7 +49,6 @@ username = "wso2carbon"
 password = "wso2carbon"
 [database.user.pool_options]
 maxActive = "1500"
-defaultAutoCommit=false
 
 [session]
 data_source="jdbc/WSO2SessionDB"
