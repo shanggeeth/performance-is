@@ -540,7 +540,7 @@ Parameters:
   DBIops:
     Description: Provide IOps size in numbers
     Type: Number
-    Default: 1000
+    Default: 5000
   SessionDBUsername:
     Type: String
     MinLength: 4
