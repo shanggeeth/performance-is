@@ -86,7 +86,7 @@ is_port=$default_is_port
 noOfTenants=100
 spCount=10
 idpCount=1
-userCount=1000
+userCount=100000
 mode=""
 deployment=""
 
